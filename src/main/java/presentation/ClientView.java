@@ -123,26 +123,7 @@ public class ClientView {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				// 1.Get a connection to database
-				try {
-					Connection myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/proiectBD",
-							"emanuelan", "passemanuela");
-					// 2.Create a statement
-					Statement stmt = myConn.createStatement();
-
-					ResultSet rs = stmt
-							.executeQuery("SELECT id_cj, data, obiect, onorar, nr_pagini\r\n" + "FROM Contract_j\r\n"
-									+ "WHERE data>='2018-08-01' AND data<='2018-09-12'\r\n" + "ORDER BY data");
-
-					// It creates and displays the table
-					JTable table = new JTable(buildTableModel(rs));
-
-					// Closes the Connection
-
-					JOptionPane.showMessageDialog(null, new JScrollPane(table));
-				} catch (Exception exc) {
-					exc.printStackTrace();
-				}
+				
 			}
 
 			public /* static */ DefaultTableModel buildTableModel(ResultSet rs) throws SQLException {
