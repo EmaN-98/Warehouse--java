@@ -5,7 +5,9 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import model.Client;
+import dao.ClientDAO;
+import dao.ProductDAO;
+import model.Product;
 
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -13,18 +15,22 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JTextField;
 
-import bll.ClientBLL;
+import bll.ProductBLL;
 
 import javax.swing.JButton;
 
-public class ClientView extends JFrame {
+public class ProductView extends JFrame {
 
 	private JFrame frame;
-	private JTextField txtIdclient;
+	private JTextField txtIdproduct;
 	private JTextField txtName;
-	private JTextField txtAddress;
-	private JTextField txtEmail;
-
+	private JTextField txtPrice;
+	private JTextField txtNumber;
+	//int id_p;
+	//private String name;
+	//private float price;
+	//private int number;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -32,7 +38,7 @@ public class ClientView extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					ClientView window= new ClientView();
+					ProductView window= new ProductView();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -44,7 +50,7 @@ public class ClientView extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public ClientView() {
+	public ProductView() {
 		frame=new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setBounds(100, 100, 450, 300);
@@ -55,16 +61,16 @@ public class ClientView extends JFrame {
 		panel.setLayout(null);
 		
 		
-		JLabel lblClient = new JLabel("Client");
+		JLabel lblClient = new JLabel("Product");
 		lblClient.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblClient.setBounds(10, 11, 80, 25);
 		panel.add(lblClient);
 		
-		txtIdclient = new JTextField();
-		txtIdclient.setText("id_client");
-		txtIdclient.setBounds(10, 50, 86, 20);
-		panel.add(txtIdclient);
-		txtIdclient.setColumns(10);
+		txtIdproduct = new JTextField();
+		txtIdproduct.setText("id_product");
+		txtIdproduct.setBounds(10, 50, 86, 20);
+		panel.add(txtIdproduct);
+		txtIdproduct.setColumns(10);
 		
 		txtName = new JTextField();
 		txtName.setText("name");
@@ -72,31 +78,34 @@ public class ClientView extends JFrame {
 		panel.add(txtName);
 		txtName.setColumns(10);
 		
-		txtAddress = new JTextField();
-		txtAddress.setText("address");
-		txtAddress.setBounds(190, 50, 86, 20);
-		panel.add(txtAddress);
-		txtAddress.setColumns(10);
+		txtPrice = new JTextField();
+		txtPrice.setText("price");
+		txtPrice.setBounds(190, 50, 86, 20);
+		panel.add(txtPrice);
+		txtPrice.setColumns(10);
 		
-		txtEmail = new JTextField();
-		txtEmail.setText("email");
-		txtEmail.setBounds(280, 50, 86, 20);
-		panel.add(txtEmail);
-		txtEmail.setColumns(10);
+		txtNumber = new JTextField();
+		txtNumber.setText("number");
+		txtNumber.setBounds(280, 50, 86, 20);
+		panel.add(txtNumber);
+		txtNumber.setColumns(10);
 		
 		JButton btnInsert = new JButton("Insert");
 		btnInsert.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String txt = txtIdclient.getText();
+				String txt = txtIdproduct.getText();
 				String txt2 = txtName.getText();
-				String txt3 = txtAddress.getText();
-				String txt4 = txtEmail.getText();
+				String txt3 = txtPrice.getText();
+				String txt4 = txtNumber.getText();
 				int id=Integer.parseInt(txt);
+				float price=Float.parseFloat(txt3);
+				int number=Integer.parseInt(txt4);
 				try {
-					Client c1=new Client(id,txt2,txt3,txt4);
-					ClientBLL.insertClient(c1);
+				Product p1=new Product(id,txt2,price,number);
+				ProductBLL.insertProduct(p1);
 				}
 				catch(Exception ex) {
+					System.out.println("produsul nu poate fi adaugat");
 				}
 			}
 		});
@@ -106,14 +115,16 @@ public class ClientView extends JFrame {
 		JButton btnEdit = new JButton("Edit");
 		btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String txt = txtIdclient.getText();
+				String txt = txtIdproduct.getText();
 				String txt2 = txtName.getText();
-				String txt3 = txtAddress.getText();
-				String txt4 = txtEmail.getText();
+				String txt3 = txtPrice.getText();
+				String txt4 = txtNumber.getText();
 				int id=Integer.parseInt(txt);
+				float price=Float.parseFloat(txt3);
+				int number=Integer.parseInt(txt4);
 				try {
-					Client c1=new Client(id,txt2,txt3,txt4);
-					ClientBLL.editClient(c1);
+					Product p1=new Product(id,txt2,price,number);
+					ProductBLL.editProduct(p1);
 				}
 				catch(Exception ex) {
 					System.out.println("clientul nu poate fi editat");
@@ -126,10 +137,11 @@ public class ClientView extends JFrame {
 		JButton btnDelete = new JButton("Delete");
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String txt = txtIdclient.getText();
+				String txt = txtIdproduct.getText();
 				int id=Integer.parseInt(txt);
 				try {
-				ClientBLL.deleteClient(id);
+				//ProductDAO p1=new ProductDAO();
+				ProductBLL.deleteProduct(id);
 				}
 				catch(Exception ex) {
 					System.out.println("clientul nu poate fi sters");
@@ -142,7 +154,8 @@ public class ClientView extends JFrame {
 		JButton btnView = new JButton("View");
 		btnView.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ClientBLL.deleteClient(0);
+				//ProductDAO p1=new ProductDAO();
+				ProductBLL.deleteProduct(0);
 			}
 		});
 		btnView.setBounds(1, 170, 90, 23);

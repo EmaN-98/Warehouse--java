@@ -12,10 +12,6 @@ import java.awt.Font;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.border.SoftBevelBorder;
-import javax.swing.border.BevelBorder;
-import javax.swing.JTextPane;
-import javax.swing.DropMode;
 
 public class Mainn {
 
@@ -24,7 +20,7 @@ public class Mainn {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	public static void mainn(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -65,7 +61,7 @@ public class Mainn {
 		lblSubiectul.setForeground(new Color(140, 0, 0));
 		lblSubiectul.setBackground(new Color(255, 160, 120));
 		lblSubiectul.setHorizontalAlignment(SwingConstants.CENTER);
-		lblSubiectul.setBounds(131, 11, 136, 28);
+		lblSubiectul.setBounds(130, 10, 130, 30);
 		frame.getContentPane().add(lblSubiectul);
 		
 		JButton btnNewButton = new JButton("Client");
@@ -76,20 +72,32 @@ public class Mainn {
 		});
 		btnNewButton.setForeground(new Color(220, 20, 60));
 		btnNewButton.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 12));
-		btnNewButton.setBounds(32, 58, 89, 23);
+		btnNewButton.setBounds(30, 60, 90, 25);
 		frame.getContentPane().add(btnNewButton);
 		
 		JButton btnNewButton_1 = new JButton("Product");
-//		btnNewButton_1.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				Ex3b3 nw=new Ex3b3();
-//				nw.NewScreen();
-//			}
-//		});
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ProductView nw=new ProductView();
+				nw.NewScreen();	
+			}
+		});
 		btnNewButton_1.setForeground(new Color(220, 20, 60));
 		btnNewButton_1.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 12));
-		btnNewButton_1.setBounds(32, 106, 89, 23);
+		btnNewButton_1.setBounds(30, 100, 90, 25);
 		frame.getContentPane().add(btnNewButton_1);
+		
+		JButton btnNewButton_2 = new JButton("Order");
+		btnNewButton_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				OrderDetailView nw=new OrderDetailView();
+				nw.NewScreen();	
+			}
+		});
+		btnNewButton_2.setForeground(new Color(220, 20, 60));
+		btnNewButton_2.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 12));
+		btnNewButton_2.setBounds(30, 140, 90, 25);
+		frame.getContentPane().add(btnNewButton_2);
 }
 }
 

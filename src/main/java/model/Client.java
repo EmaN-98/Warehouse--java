@@ -59,10 +59,4 @@ public class Client {
 		return "Client [id=" + id + ", name=" + name + ", address=" + address + ", email=" + email + "]";
 	}
 
-/*	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		Client c1=new Client(1,"Pop Iulia","Trandafirului 7","popiulia@gmail.com");
-		System.out.println(c1);
-	}*/
-
 }

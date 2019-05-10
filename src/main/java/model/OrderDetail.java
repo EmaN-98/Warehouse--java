@@ -40,7 +40,8 @@ public class OrderDetail {
 	}
 	@Override
 	public String toString() {
-		return "OrderDetail [id_od=" + id_od + ", id_c=" + id_c + ", id_p=" + id_p + ", pieces=" + pieces + "]";
+		//return "OrderDetail [id_od=" + id_od + ", id_c=" + id_c + ", id_p=" + id_p + ", pieces=" + pieces + "]";
+		return ("Order_number: "+id_od+ "\r\nClient_id: "+id_c+"\r\nProduct_id: "+id_p+"\r\nNumber of pieces: "+pieces);
 	}
 	
 	

@@ -1,0 +1,5 @@
+Bill: 
+Order_number: 74
+Client_id: 1
+Product_id: 1
+Number of pieces: 1

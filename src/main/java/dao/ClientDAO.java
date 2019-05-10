@@ -6,8 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
-import java.util.logging.Level;
-
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -26,11 +24,10 @@ public class ClientDAO {
 	private final static String editClient = "UPDATE client SET name=?, address=?, email=? WHERE id_c= ? ";
 	private final static String findStatementString = "SELECT * FROM client where id_c = ?";
 
-	
 	public static int insertClient(int id, String name, String address, String email) {
-		// conn=ConnectionFactory.getInstance();
+
 		PreparedStatement stmt = null;
-//		int insertedId = -1;
+
 		ResultSet res;
 		try {
 			conn = ConnectionFactory.getConnection();
@@ -40,30 +37,27 @@ public class ClientDAO {
 			stmt.setString(3, address);
 			stmt.setString(4, email);
 			stmt.executeUpdate();
-			// stmt.executeQuery();
+
 			res = stmt.getGeneratedKeys();
-			
+
 			ResultSet rs = stmt.executeQuery("SELECT *\r\n" + "FROM client\r\n");
 			JTable table = new JTable(buildTableModel(rs));
 			JOptionPane.showMessageDialog(null, new JScrollPane(table));
-			
-			// if (res.next()) {
-			// insertedId = res.getInt(1);
-			// }
+
 		} catch (SQLException exc) {
-			// LOGGER.log(Level.WARNING, "StudentDAO:insert " + e.getMessage());
+
 			exc.printStackTrace();
-			System.out.println("clientul cu acest id exista deja");
+			JOptionPane.showMessageDialog(null, "Sorry, cannot insert client. Try another ID");
+
 		} finally {
 			ConnectionFactory.close(stmt);
 			ConnectionFactory.close(conn);
 		}
-		// return Integer.parseInt(id);
+
 		return id;
 	}
 
 	public static void deleteClient(int id) {
-		// conn=ConnectionFactory.getInstance();
 		PreparedStatement stmt = null;
 		ResultSet res;
 		try {
@@ -72,22 +66,23 @@ public class ClientDAO {
 			stmt.setLong(1, id);
 			stmt.executeUpdate();
 			res = stmt.getGeneratedKeys();
-			
+
 			ResultSet rs = stmt.executeQuery("SELECT *\r\n" + "FROM client\r\n");
 			JTable table = new JTable(buildTableModel(rs));
 			JOptionPane.showMessageDialog(null, new JScrollPane(table));
-			
+
 		} catch (SQLException exc) {
 			exc.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Sorry, cannot delete client.");
+
 		} finally {
 			ConnectionFactory.close(stmt);
 			ConnectionFactory.close(conn);
 		}
 	}
 
+	public static void editClient(int id, String name, String address, String email) {
 
-	public static void editClient(int id,String name, String address, String email) {
-		// conn=ConnectionFactory.getInstance();
 		PreparedStatement stmt = null;
 		ResultSet res;
 		try {
@@ -99,13 +94,16 @@ public class ClientDAO {
 			stmt.setString(3, email);
 			stmt.executeUpdate();
 			res = stmt.getGeneratedKeys();
-			
+
 			ResultSet rs = stmt.executeQuery("SELECT *\r\n" + "FROM client\r\n");
 			JTable table = new JTable(buildTableModel(rs));
 			JOptionPane.showMessageDialog(null, new JScrollPane(table));
-			
+
 		} catch (SQLException exc) {
 			exc.printStackTrace();
+			JOptionPane.showMessageDialog(null,
+					"Sorry, cannot edit client. Check again the Id, name, address and email desired");
+
 		} finally {
 			ConnectionFactory.close(stmt);
 			ConnectionFactory.close(conn);
@@ -136,7 +134,7 @@ public class ClientDAO {
 		return new DefaultTableModel(data, columnNames);
 
 	}
-	
+
 	public static Client findById(int clientId) {
 		Client toReturn = null;
 
@@ -152,10 +150,9 @@ public class ClientDAO {
 			String name = rs.getString("name");
 			String address = rs.getString("address");
 			String email = rs.getString("email");
-	
+
 			toReturn = new Client(clientId, name, address, email);
 		} catch (SQLException e) {
-			//LOGGER.log(Level.WARNING,"StudentDAO:findById " + e.getMessage());
 			e.printStackTrace();
 		} finally {
 			ConnectionFactory.close(rs);
@@ -164,21 +161,4 @@ public class ClientDAO {
 		}
 		return toReturn;
 	}
-	
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		// ClientDAO c1=new ClientDAO();
-		// c1.insertClient("5","b","addr","eml");
-	//	Client c = new Client(6, "dummy name", "dummy address", "dummy@address.co");
-
-	
-	// int id = insertClient(38,"dummy name", "dummy address", "dummy@address.co");
-//System.out.println(id);
-	//	deleteClient(18);
-		editClient(1,"editedd","addresss","emailll");
-	//	Client cl=new Client(0, null, null, null);
-	//	cl=findById(2);
-	//	System.out.println(cl);
-	}
-
 }

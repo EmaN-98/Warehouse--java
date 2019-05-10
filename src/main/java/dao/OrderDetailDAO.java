@@ -1,5 +1,10 @@
 package dao;
 
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,6 +21,7 @@ import com.mysql.cj.jdbc.result.ResultSetMetaData;
 
 import connection.ConnectionFactory;
 import model.Client;
+import model.OrderDetail;
 import model.Product;
 
 public class OrderDetailDAO {
@@ -26,17 +32,14 @@ public class OrderDetailDAO {
 	private final static String editProduct = "UPDATE product SET name=?, price=?,number=? WHERE id_p= ? ";
 
 	public static int createOrder(int id_od, int id_c, int id_p, int quantity) {
-		// conn=ConnectionFactory.getInstance();
 		PreparedStatement stmt = null;
-//		int insertedId = -1;
-		ResultSet res;
-
 		Client c1 = new Client(0, null, null, null);
 		c1 = findByIdC(id_c);
 		Product p1 = new Product(0, null, 0, 0);
 		p1 = findByIdP(id_p);
 		if (p1.getNumber() < quantity) {
 			System.out.println("stoc epuizat!");
+			JOptionPane.showMessageDialog(null, "Stoc epuizat!");
 		} else {
 			p1.setNumber(p1.getNumber() - quantity);
 			editProduct(p1.getId_p(), p1.getName(), p1.getPrice(), p1.getNumber());
@@ -49,22 +52,19 @@ public class OrderDetailDAO {
 					stmt.setInt(3, id_p);
 					stmt.setInt(4, quantity);
 					stmt.executeUpdate();
-					// stmt.executeQuery();
-					res = stmt.getGeneratedKeys();
-
 					ResultSet rs = stmt.executeQuery("SELECT *\r\n" + "FROM orderdetail\r\n");
 					JTable table = new JTable(buildTableModel(rs));
 					JOptionPane.showMessageDialog(null, new JScrollPane(table));
-
+					ResultSet rs2 = stmt.executeQuery("SELECT *\r\n" + "FROM product\r\n");
+					JTable table2 = new JTable(buildTableModel(rs2));
+					JOptionPane.showMessageDialog(null, new JScrollPane(table2));
 				} catch (SQLException exc) {
-					// LOGGER.log(Level.WARNING, "StudentDAO:insert " + e.getMessage());
 					exc.printStackTrace();
-
+					JOptionPane.showMessageDialog(null, "Sorry, cannot create order. Check the ID's or the quantity");
 				} finally {
 					ConnectionFactory.close(stmt);
 					ConnectionFactory.close(conn);
 				}
-
 			} else
 				System.out.println("nu exista clientul sau produsul");
 		}
@@ -72,7 +72,7 @@ public class OrderDetailDAO {
 	}
 
 	public static void editProduct(int id, String name, float price, int number) {
-		// conn=ConnectionFactory.getInstance();
+
 		PreparedStatement stmt = null;
 		ResultSet res;
 		try {
@@ -85,10 +85,6 @@ public class OrderDetailDAO {
 			stmt.executeUpdate();
 			res = stmt.getGeneratedKeys();
 
-			ResultSet rs = stmt.executeQuery("SELECT *\r\n" + "FROM product\r\n");
-			JTable table = new JTable(buildTableModel(rs));
-			JOptionPane.showMessageDialog(null, new JScrollPane(table));
-
 		} catch (SQLException exc) {
 			exc.printStackTrace();
 		} finally {
@@ -97,17 +93,34 @@ public class OrderDetailDAO {
 		}
 	}
 
+	public static void createBill(OrderDetail o) {
+		Writer writer = null;
+
+		try {
+			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("bill.txt"), "utf-8"));
+			writer.write("Bill: ");
+			((BufferedWriter) writer).newLine();
+			writer.write(o.toString());
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		} finally {
+			try {
+				writer.close();
+			} catch (Exception ex) {
+			}
+		}
+
+	}
+
 	public static DefaultTableModel buildTableModel(ResultSet rs) throws SQLException {
 
 		ResultSetMetaData metaData = (ResultSetMetaData) rs.getMetaData();
-
 		// names of columns
 		Vector<String> columnNames = new Vector<String>();
 		int columnCount = metaData.getColumnCount();
 		for (int column = 1; column <= columnCount; column++) {
 			columnNames.add(metaData.getColumnName(column));
 		}
-
 		// data of the table
 		Vector<Vector<Object>> data = new Vector<Vector<Object>>();
 		while (rs.next()) {
@@ -140,7 +153,7 @@ public class OrderDetailDAO {
 
 			toReturn = new Client(clientId, name, address, email);
 		} catch (SQLException e) {
-			// LOGGER.log(Level.WARNING,"StudentDAO:findById " + e.getMessage());
+
 			e.printStackTrace();
 		} finally {
 			ConnectionFactory.close(rs);
@@ -167,7 +180,7 @@ public class OrderDetailDAO {
 			int number = rs.getInt("number");
 			toReturn = new Product(productId, name, price, number);
 		} catch (SQLException e) {
-			// LOGGER.log(Level.WARNING,"StudentDAO:findById " + e.getMessage());
+
 			e.printStackTrace();
 		} finally {
 			ConnectionFactory.close(rs);
@@ -175,12 +188,6 @@ public class OrderDetailDAO {
 			ConnectionFactory.close(dbConnection);
 		}
 		return toReturn;
-	}
-
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		int id = createOrder(48, 1, 2, 1);
-		System.out.println(id);
 	}
 
 }
